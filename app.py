@@ -53,6 +53,21 @@ with gr.Blocks() as gradio_ui:
     </div>
     """)
 
+    gr.HTML("""
+    <div style="margin-bottom: 20px; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+        <h2 style="margin-top: 0;">How to Use This App</h2>
+        <p>This app combines web scraping with the power of Large Language Models (LLMs) to extract specific information from web pages. Here's how it works:</p>
+        <ol>
+            <li><strong>Enter a URL:</strong> Provide the URL of the web page you want to analyze.</li>
+            <li><strong>Define Your Query:</strong> Specify the exact information you're looking for (e.g., product name, price, customer ratings).</li>
+            <li><strong>Scrape the Web Page:</strong> Click the "Scrape with FireCrawl" button to extract the content of the page.</li>
+            <li><strong>Select Model & Provider:</strong> Choose the LLM model you want to use for information extraction.</li>
+            <li><strong>Extract Info by LLM:</strong> Click the "Extract Info by LLM" button to get the information based on your query.</li>
+        </ol>
+        <p><strong>What makes this different from a regular web scraper?</strong> Traditional web scrapers require pre-programming to extract product data for each specific website. These scrapers are brittle and can break if the website's design changes. This app uses LLMs to <em>understand</em> your query and extract only the relevant information, saving you time and effort and removing the need for constant maintenance.</p>
+    </div>
+    """)
+    
     
     with gr.Column():
         url_input = gr.Textbox(label="Enter URL to scrape", placeholder="https://example.com/query?search=cat+food", lines=1)
@@ -62,9 +77,11 @@ with gr.Blocks() as gradio_ui:
         
         scrape_result_textbox = gr.Textbox(label="Scrape Result", lines=20, show_copy_button=True)
         
-        label_llm_section = gr.Label("Use LLM to extract information from the scraped content")
-        gr.HTML("<hr>")
-        
+        gr.HTML("<hr style='margin-top:10px; margin-bottom:10px;'>")
+        gr.Markdown("### 🧠 LLM Extraction")
+        gr.Markdown("Use a language model to extract structured information from the scraped content.")
+        gr.HTML("<hr style='margin-top:10px; margin-bottom:10px;'>")
+
     
     with gr.Row():
         
@@ -83,7 +100,7 @@ with gr.Blocks() as gradio_ui:
         )
         
         
-        llm_response_btn = gr.Button("Extracted Info by LLM")
+        llm_response_btn = gr.Button("Extract Info by LLM")
         
 
     # LLM response output area and loader

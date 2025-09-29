@@ -19,6 +19,9 @@ def extract_page_info_by_llm(user_query: str, scraped_markdown_content: str, mod
     
     If user asks for JSON format, please provide the answer in JSON format only.
     
+    User will mostly request you to extract product information but can also ask you to extract other information from the content. 
+    So always read the user query carefully and extract information accordingly.
+    
     If you do not find or know the answer, do not hallucinate, do not try to generate fake answers.
     If no Context is given, simply state "No relevant information found to answer your question."
     
