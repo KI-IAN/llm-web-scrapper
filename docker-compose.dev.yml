@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  semantic-search-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: llm-web-scrapper
+    ports:
+      - "12200:7860"
+    environment:
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY}  # Load this key from .env in local/dev environment
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}  # Load this key from .env in local/dev environment
+      - FIRECRAWL_API_KEY=${FIRECRAWL_API_KEY}  # Load this key from .env in local/dev environment
+    volumes:
+      - .:/app:rw           # This is for local development. Docker reads the code from the host machine. Changes on the host are reflected in the container.
+    restart: unless-stopped

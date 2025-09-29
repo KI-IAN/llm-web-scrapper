@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  semantic-search-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: llm-web-scrapper
+    ports:
+      - "12200:7860"
+    environment:
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY}  # Load this key from .env or manually add the secret
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}  # Load this key from .env or manually add the secret
+      - FIRECRAWL_API_KEY=${FIRECRAWL_API_KEY}  # Load this key from .env in local/dev environment
+    restart: unless-stopped
+
