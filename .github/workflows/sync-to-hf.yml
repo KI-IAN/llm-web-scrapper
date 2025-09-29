@@ -1,0 +1,22 @@
+# .github/workflows/sync-to-hf.yml
+name: Sync to Hugging Face Spaces
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Push Source Code From Github to Hugging Face Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "frkhan@example.com"
+          git config --global user.name "F R Khan"
+          git remote add space https://huggingface.co/spaces/frkhan/semantic-search-app
+          git push --force https://frkhan:$HF_TOKEN@huggingface.co/spaces/frkhan/semantic-search-app main
