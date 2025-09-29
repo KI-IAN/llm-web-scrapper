@@ -18,5 +18,5 @@ jobs:
         run: |
           git config --global user.email "frkhan@example.com"
           git config --global user.name "F R Khan"
-          git remote add space https://huggingface.co/spaces/frkhan/semantic-search-app
-          git push --force https://frkhan:$HF_TOKEN@huggingface.co/spaces/frkhan/semantic-search-app main
+          git remote add space https://huggingface.co/spaces/frkhan/llm-web-scrapper
+          git push --force https://frkhan:$HF_TOKEN@huggingface.co/spaces/frkhan/llm-web-scrapper
