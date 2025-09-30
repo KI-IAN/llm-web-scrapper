@@ -25,9 +25,14 @@ def get_markdown_from_documents(docs: list[Document]) -> str:
 
 
 def scrape_and_get_markdown_with_firecrawl(url: str) -> str:
-    docs = scrape_with_firecrawl(url)
-    markdown = get_markdown_from_documents(docs)
-    return markdown
+    try:
+        docs = scrape_with_firecrawl(url)
+        if not docs:
+            return "❌ <span style='color:red;'>FireCrawl completed but returned no content. The page might be empty or inaccessible.</span>"
+        markdown = get_markdown_from_documents(docs)
+        return markdown
+    except Exception as e:
+        return f"❌ <span style='color:red;'>An error occurred while scraping with FireCrawl: {e}</span>"
 
    
 

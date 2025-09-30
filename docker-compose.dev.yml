@@ -4,7 +4,7 @@ services:
   semantic-search-app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev # Use the development Dockerfile for local development
     container_name: llm-web-scrapper
     ports:
       - "12200:7860"

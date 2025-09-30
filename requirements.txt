@@ -5,3 +5,5 @@ firecrawl-py==4.3.6
 langchain-community
 langchain-google-genai==2.1.12
 langchain-nvidia-ai-endpoints==0.3.18
+asyncio
+crawl4ai

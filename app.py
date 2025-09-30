@@ -1,6 +1,7 @@
 import gradio as gr
 
 import firecrawl_client
+import crawl4ai_client
 import llm_inference_service
 
 def parse_model_provider(selection):
@@ -17,6 +18,17 @@ def llm_response_wrapper(query, scrape_result, model_provider_selection):
     if not result or (isinstance(result, str) and result.strip() == ""):
         return "❌ <span style='color:red;'>No information could be extracted from the scraped content. Please check your query or try a different model/provider.</span>"
     return result
+
+async def scrape_website(url, scraper_selection):
+    try:
+        if scraper_selection == "Scrape with FireCrawl":
+            return firecrawl_client.scrape_and_get_markdown_with_firecrawl(url)
+        elif scraper_selection == "Scrape with Crawl4AI":
+            return await crawl4ai_client.scrape_and_get_markdown_with_crawl4ai(url)
+        else:
+            return "❌ <span style='color:red;'>Invalid scraper selected.</span>"
+    except Exception as e:
+        return f"❌ <span style='color:red;'>An unexpected error occurred: {e}</span>"
 
 #Gradio UI
 with gr.Blocks() as gradio_ui:
@@ -36,7 +48,7 @@ with gr.Blocks() as gradio_ui:
             <a href="https://firecrawl.dev/" target="_blank">
                 <img src="https://img.shields.io/badge/FireCrawl-Web%20Scraper-orange?logo=fire" alt="FireCrawl">
             </a>
-            <a href="https://github.com/crawl4ai/crawl4ai" target="_blank">
+            <a href="https://docs.crawl4ai.com/" target="_blank">
                 <img src="https://img.shields.io/badge/Crawl4AI-Web%20Scraper-blueviolet?logo=github" alt="Crawl4AI">
             </a>
 
@@ -64,7 +76,13 @@ with gr.Blocks() as gradio_ui:
             <li><strong>Select Model & Provider:</strong> Choose the LLM model you want to use for information extraction.</li>
             <li><strong>Extract Info by LLM:</strong> Click the "Extract Info by LLM" button to get the information based on your query.</li>
         </ol>
-        <p><strong>What makes this different from a regular web scraper?</strong> Traditional web scrapers require pre-programming to extract product data for each specific website. These scrapers are brittle and can break if the website's design changes. This app uses LLMs to <em>understand</em> your query and extract only the relevant information, saving you time and effort and removing the need for constant maintenance.</p>
+        
+        <br />
+        <br />
+        
+        <p><strong>What makes this different from a regular web scraper?</strong>  </p>
+    
+        <p>Traditional web scrapers require pre-programming to extract product data for each specific website. These scrapers are brittle and can break if the website's design changes. This app uses LLMs to <em>understand</em> your query and extract only the relevant information, saving you time and effort and removing the need for constant maintenance.</p>
     </div>
     """)
     
@@ -73,8 +91,14 @@ with gr.Blocks() as gradio_ui:
         url_input = gr.Textbox(label="Enter URL to scrape", placeholder="https://example.com/query?search=cat+food", lines=1)
         # search_query_input = gr.Textbox(label="Enter your query", placeholder="Paw paw fish adult cat food", lines=1)
         query_input = gr.Textbox(label="What information do you want to find?", placeholder="Find product name, price, rating", lines=1)
-        scrape_btn = gr.Button("Scrape with FireCrawl")
         
+        with gr.Row():
+            scraper_dropdown = gr.Dropdown(
+                label="Select Scraper",
+                choices=["Scrape with FireCrawl", "Scrape with Crawl4AI"],
+                value="Scrape with FireCrawl"
+            )
+            scrape_btn = gr.Button("Scrape Website")
         scrape_result_textbox = gr.Textbox(label="Scrape Result", lines=20, show_copy_button=True)
         
         gr.HTML("<hr style='margin-top:10px; margin-bottom:10px;'>")
@@ -101,6 +125,7 @@ with gr.Blocks() as gradio_ui:
         
         
         llm_response_btn = gr.Button("Extract Info by LLM")
+        cancel_btn = gr.Button("Cancel", variant="stop")
         
 
     # LLM response output area and loader
@@ -113,12 +138,14 @@ with gr.Blocks() as gradio_ui:
     # Removed custom loader; Gradio will show a spinner automatically during processing.
 
 
-    scrape_btn.click(fn=firecrawl_client.scrape_and_get_markdown_with_firecrawl, inputs=url_input, outputs=scrape_result_textbox)
+    scrape_event = scrape_btn.click(fn=scrape_website, inputs=[url_input, scraper_dropdown], outputs=scrape_result_textbox)
 
-    llm_response_btn.click(
+    llm_event = llm_response_btn.click(
         fn=llm_response_wrapper,
         inputs=[query_input, scrape_result_textbox, model_provider_dropdown],
         outputs=llm_response
     )
+    
+    cancel_btn.click(fn=None, inputs=None, outputs=None, cancels=[scrape_event, llm_event])
 
 gradio_ui.launch(server_name="0.0.0.0")
