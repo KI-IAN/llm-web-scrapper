@@ -1,4 +1,25 @@
 from langchain.chat_models import init_chat_model
+from langfuse.langchain import CallbackHandler
+from langfuse import Langfuse
+
+from config import LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, LANGFUSE_HOST
+
+# Initialize Langfuse client
+# It is safe to do this even if keys are not set, as the handler will only be used if keys are present.
+langfuse_callback_handler = None
+callbacks = []
+
+if LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY:
+    langfuse = Langfuse(
+        public_key=LANGFUSE_PUBLIC_KEY,
+        secret_key=LANGFUSE_SECRET_KEY,
+        host=LANGFUSE_HOST,
+    )
+    
+    langfuse_callback_handler = CallbackHandler()
+    
+    callbacks.append(langfuse_callback_handler)
+
 
 
 def extract_page_info_by_llm(user_query: str, scraped_markdown_content: str, model_name: str, model_provider: str) -> str:
@@ -38,6 +59,6 @@ def extract_page_info_by_llm(user_query: str, scraped_markdown_content: str, mod
     """
     
     llm = init_chat_model(model_name, model_provider=model_provider)
-    response = llm.invoke(prompt)
+    response = llm.invoke(prompt, config={"callbacks": callbacks})
     return response.content
     

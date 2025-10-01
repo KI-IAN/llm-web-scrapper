@@ -1,8 +1,19 @@
 import gradio as gr
-
 import firecrawl_client
 import crawl4ai_client
 import llm_inference_service
+from config import LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, LANGFUSE_HOST
+from langfuse import Langfuse, get_client
+
+# Initialize Langfuse if configured
+langfuse = None
+if LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY:
+    Langfuse(
+        public_key=LANGFUSE_PUBLIC_KEY, 
+        secret_key=LANGFUSE_SECRET_KEY, 
+        host=LANGFUSE_HOST
+    )
+    langfuse = get_client()
 
 def parse_model_provider(selection):
     # Expected format: "<model_name> (<provider>)"
@@ -12,23 +23,50 @@ def parse_model_provider(selection):
         return model, provider
     raise ValueError(f"Invalid selection format: {selection}")
     
-def llm_response_wrapper(query, scrape_result, model_provider_selection):
+def llm_response_wrapper(query, scrape_result, model_provider_selection, progress=gr.Progress(track_tqdm=True)):
+    yield "⏳ Generating response... Please wait."
+    
     model, provider = parse_model_provider(model_provider_selection)
     result = llm_inference_service.extract_page_info_by_llm(query, scrape_result, model, provider)
     if not result or (isinstance(result, str) and result.strip() == ""):
-        return "❌ <span style='color:red;'>No information could be extracted from the scraped content. Please check your query or try a different model/provider.</span>"
-    return result
+        yield "❌ <span style='color:red;'>No information could be extracted from the scraped content. Please check your query or try a different model/provider.</span>"
+    yield result
 
-async def scrape_website(url, scraper_selection):
-    try:
-        if scraper_selection == "Scrape with FireCrawl":
-            return firecrawl_client.scrape_and_get_markdown_with_firecrawl(url)
-        elif scraper_selection == "Scrape with Crawl4AI":
-            return await crawl4ai_client.scrape_and_get_markdown_with_crawl4ai(url)
-        else:
-            return "❌ <span style='color:red;'>Invalid scraper selected.</span>"
-    except Exception as e:
-        return f"❌ <span style='color:red;'>An unexpected error occurred: {e}</span>"
+async def scrape_website(url, scraper_selection, progress=gr.Progress(track_tqdm=True)):
+    """
+    Performs the scraping and yields Gradio component updates directly.
+    This generator pattern is the most reliable way to handle sequential UI updates.
+    """
+    # 1. First, yield an update to show the loading state and hide the old image.
+    yield "⏳ Scraping website... Please wait."
+
+    markdown = ""
+    if not langfuse:
+        try:
+            if scraper_selection == "Scrape with FireCrawl":
+                markdown = firecrawl_client.scrape_and_get_markdown_with_firecrawl(url)
+            elif scraper_selection == "Scrape with Crawl4AI":
+                markdown = await crawl4ai_client.scrape_and_get_markdown_with_crawl4ai(url)
+            else:
+                markdown = "❌ <span style='color:red;'>Invalid scraper selected.</span>"
+        except Exception as e:
+            markdown = f"❌ <span style='color:red;'>An unexpected error occurred: {e}</span>"
+        yield markdown
+        return
+
+    with langfuse.start_as_current_span(name="web-scraping", input={"url": url, "scraper": scraper_selection}) as span:
+        try:
+            if scraper_selection == "Scrape with FireCrawl":
+                markdown = firecrawl_client.scrape_and_get_markdown_with_firecrawl(url)
+            elif scraper_selection == "Scrape with Crawl4AI":
+                markdown = await crawl4ai_client.scrape_and_get_markdown_with_crawl4ai(url)
+            else:
+                markdown = "❌ <span style='color:red;'>Invalid scraper selected.</span>"
+            span.update_trace(output={"markdown_char_count": len(markdown), "status": "Success"})
+        except Exception as e:
+            markdown = f"❌ <span style='color:red;'>An unexpected error occurred: {e}</span>"
+            span.update_trace(output={"error": str(e), "status": "Error"})
+        yield markdown
 
 #Gradio UI
 with gr.Blocks() as gradio_ui:
@@ -99,8 +137,10 @@ with gr.Blocks() as gradio_ui:
                 value="Scrape with FireCrawl"
             )
             scrape_btn = gr.Button("Scrape Website")
+            clear_btn = gr.Button("Clear")
+
         scrape_result_textbox = gr.Textbox(label="Scrape Result", lines=20, show_copy_button=True)
-        
+
         gr.HTML("<hr style='margin-top:10px; margin-bottom:10px;'>")
         gr.Markdown("### 🧠 LLM Extraction")
         gr.Markdown("Use a language model to extract structured information from the scraped content.")
@@ -130,7 +170,7 @@ with gr.Blocks() as gradio_ui:
 
     # LLM response output area and loader
     llm_response = gr.Markdown(
-        "\n" * 9,  # 9 newlines + 1 line for empty content = 10 lines minimum
+        "",
         label="LLM Response",
         show_copy_button=True,
         visible=True
@@ -138,7 +178,14 @@ with gr.Blocks() as gradio_ui:
     # Removed custom loader; Gradio will show a spinner automatically during processing.
 
 
-    scrape_event = scrape_btn.click(fn=scrape_website, inputs=[url_input, scraper_dropdown], outputs=scrape_result_textbox)
+    scrape_event = scrape_btn.click(
+        fn=scrape_website, 
+        inputs=[url_input, scraper_dropdown], 
+        outputs=[scrape_result_textbox],
+    )
+
+    # Clear button functionality
+    clear_btn.click(lambda: ("", "", "", ""), outputs=[url_input, query_input, scrape_result_textbox, llm_response])
 
     llm_event = llm_response_btn.click(
         fn=llm_response_wrapper,
@@ -146,6 +193,6 @@ with gr.Blocks() as gradio_ui:
         outputs=llm_response
     )
     
-    cancel_btn.click(fn=None, inputs=None, outputs=None, cancels=[scrape_event, llm_event])
+    cancel_btn.click(fn=lambda: None, inputs=None, outputs=None, cancels=[scrape_event, llm_event])
 
 gradio_ui.launch(server_name="0.0.0.0")

@@ -1,9 +1,10 @@
 gradio==5.46.1
 requests==2.32.5
-dotenv==0.9.9
+python-dotenv==1.1.1
 firecrawl-py==4.3.6
-langchain-community
 langchain-google-genai==2.1.12
 langchain-nvidia-ai-endpoints==0.3.18
-asyncio
-crawl4ai
+Crawl4AI==0.7.4
+langfuse==3.5.2
+langchain==0.3.27
+langchain-community==0.3.30
