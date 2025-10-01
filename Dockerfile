@@ -8,7 +8,6 @@ COPY requirements.txt .
 RUN pip install --break-system-packages -r requirements.txt
 RUN python -m playwright install --with-deps chromium
 
-# RUN pip install watchfiles
 
 COPY . .
 

@@ -1,3 +1,11 @@
+"""
+This module provides the service for interacting with Large Language Models (LLMs).
+
+It is responsible for initializing the Langfuse callback handler for tracing,
+constructing the appropriate prompt for information extraction, initializing the
+selected chat model, and invoking the model to get a response.
+"""
+
 from langchain.chat_models import init_chat_model
 from langfuse.langchain import CallbackHandler
 from langfuse import Langfuse
@@ -5,24 +13,41 @@ from langfuse import Langfuse
 from config import LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, LANGFUSE_HOST
 
 # Initialize Langfuse client
-# It is safe to do this even if keys are not set, as the handler will only be used if keys are present.
+# This block sets up the Langfuse callback handler for LangChain.
+# It initializes the Langfuse client and creates a CallbackHandler instance
+# only if the required API keys are available. The handler is then added to
+# a list of callbacks that can be passed to LLM invocations for tracing.
 langfuse_callback_handler = None
 callbacks = []
 
 if LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY:
-    langfuse = Langfuse(
+    Langfuse(
         public_key=LANGFUSE_PUBLIC_KEY,
         secret_key=LANGFUSE_SECRET_KEY,
         host=LANGFUSE_HOST,
     )
-    
     langfuse_callback_handler = CallbackHandler()
-    
     callbacks.append(langfuse_callback_handler)
 
 
 
 def extract_page_info_by_llm(user_query: str, scraped_markdown_content: str, model_name: str, model_provider: str) -> str:
+    """
+    Extracts information from scraped content using a specified Large Language Model.
+
+    This function constructs a detailed prompt, initializes the selected chat model,
+    and invokes it with the scraped content and user query. If Langfuse is configured,
+    it uses a callback handler to trace the LLM interaction.
+
+    Args:
+        user_query (str): The user's query specifying what information to extract.
+        scraped_markdown_content (str): The markdown content from the scraped web page.
+        model_name (str): The name of the LLM to use for extraction.
+        model_provider (str): The provider of the LLM (e.g., 'google_genai', 'nvidia').
+
+    Returns:
+        str: The content of the LLM's response.
+    """
     
     if not scraped_markdown_content:
         return "No relevant information found to answer your question."

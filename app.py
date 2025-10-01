@@ -1,3 +1,11 @@
+"""
+This module sets up and runs the Gradio web interface for the LLM Web Scraper application.
+
+It orchestrates the UI components, event handling for scraping and LLM extraction,
+and integrates with backend services for scraping (FireCrawl, Crawl4AI) and
+LLM inference. It also initializes and uses Langfuse for tracing application performance.
+"""
+
 import gradio as gr
 import firecrawl_client
 import crawl4ai_client
@@ -16,7 +24,20 @@ if LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY:
     langfuse = get_client()
 
 def parse_model_provider(selection):
-    # Expected format: "<model_name> (<provider>)"
+    """
+    Parses a model and provider from a selection string.
+
+    The expected format is "<model_name> (<provider>)".
+
+    Args:
+        selection (str): The string to parse.
+
+    Returns:
+        tuple[str, str]: A tuple containing the model name and provider.
+
+    Raises:
+        ValueError: If the selection string is not in the expected format.
+    """
     if "(" in selection and ")" in selection:
         model = selection.split(" (")[0].strip()
         provider = selection.split(" (")[1].replace(")", "").strip()
@@ -24,6 +45,21 @@ def parse_model_provider(selection):
     raise ValueError(f"Invalid selection format: {selection}")
     
 def llm_response_wrapper(query, scrape_result, model_provider_selection, progress=gr.Progress(track_tqdm=True)):
+    """
+    A generator function that wraps the LLM inference call for the Gradio UI.
+
+    It yields an initial status message, calls the LLM service to extract information,
+    and then yields the final result or an error message.
+
+    Args:
+        query (str): The user's query for information extraction.
+        scrape_result (str): The scraped markdown content from the website.
+        model_provider_selection (str): The selected model and provider string.
+        progress (gr.Progress, optional): Gradio progress tracker. Defaults to gr.Progress(track_tqdm=True).
+
+    Yields:
+        str: Status messages and the final LLM response as a markdown string.
+    """
     yield "⏳ Generating response... Please wait."
     
     model, provider = parse_model_provider(model_provider_selection)
@@ -33,9 +69,19 @@ def llm_response_wrapper(query, scrape_result, model_provider_selection, progres
     yield result
 
 async def scrape_website(url, scraper_selection, progress=gr.Progress(track_tqdm=True)):
-    """
-    Performs the scraping and yields Gradio component updates directly.
-    This generator pattern is the most reliable way to handle sequential UI updates.
+    """An async generator that scrapes a website based on user selection for the Gradio UI.
+
+    This function yields an initial status message, then performs the web scraping
+    using the selected tool (FireCrawl or Crawl4AI). If Langfuse is configured,
+    it wraps the scraping operation in a trace for observability.
+
+    Args:
+        url (str): The URL of the website to scrape.
+        scraper_selection (str): The scraping tool selected by the user.
+        progress (gr.Progress, optional): Gradio progress tracker. Defaults to gr.Progress(track_tqdm=True).
+
+    Yields:
+        str: A status message, followed by the scraped markdown content or an error message.
     """
     # 1. First, yield an update to show the loading state and hide the old image.
     yield "⏳ Scraping website... Please wait."
@@ -69,6 +115,7 @@ async def scrape_website(url, scraper_selection, progress=gr.Progress(track_tqdm
         yield markdown
 
 #Gradio UI
+# This block defines the entire Gradio user interface, including layout and component interactions.
 with gr.Blocks() as gradio_ui:
     gr.HTML("""
     <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
@@ -127,14 +174,13 @@ with gr.Blocks() as gradio_ui:
     
     with gr.Column():
         url_input = gr.Textbox(label="Enter URL to scrape", placeholder="https://example.com/query?search=cat+food", lines=1)
-        # search_query_input = gr.Textbox(label="Enter your query", placeholder="Paw paw fish adult cat food", lines=1)
-        query_input = gr.Textbox(label="What information do you want to find?", placeholder="Find product name, price, rating", lines=1)
+        query_input = gr.Textbox(label="What information do you want to find?", placeholder="Find product name, price, rating etc. / Summarize the content of this page", lines=2)
         
         with gr.Row():
             scraper_dropdown = gr.Dropdown(
                 label="Select Scraper",
-                choices=["Scrape with FireCrawl", "Scrape with Crawl4AI"],
-                value="Scrape with FireCrawl"
+                choices=["Scrape with Crawl4AI", "Scrape with FireCrawl"],
+                value="Scrape with Crawl4AI"
             )
             scrape_btn = gr.Button("Scrape Website")
             clear_btn = gr.Button("Clear")
