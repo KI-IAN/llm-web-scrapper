@@ -136,6 +136,12 @@ with gr.Blocks() as gradio_ui:
             <a href="https://docs.crawl4ai.com/" target="_blank">
                 <img src="https://img.shields.io/badge/Crawl4AI-Web%20Scraper-blueviolet?logo=github" alt="Crawl4AI">
             </a>
+            <a href="https://playwright.dev/" target="_blank">
+                <img src="https://img.shields.io/badge/Playwright-Web%20Automation-brightgreen?logo=playwright" alt="Playwright">
+            </a>
+            <a href="https://langfuse.com/" target="_blank">
+                <img src="https://img.shields.io/badge/Langfuse-Observability-blue" alt="Langfuse">
+            </a>
 
         </div>
     </div>

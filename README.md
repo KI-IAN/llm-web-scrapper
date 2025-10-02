@@ -36,6 +36,7 @@ Scrape any web page, ask questions, and get structured answers powered by LangCh
 | **Langfuse** | Tracing and observability for all operations |
 | **Gradio** | Interactive web UI |
 | **Docker** | Containerized deployment |
+| **Playwright**| Web scraping using Crawl4AI|
 
 ---
 
@@ -100,23 +101,37 @@ Access the app at http://localhost:12200.
 
 To use this app, you'll need API keys for **Google Gemini**, **NVIDIA NIM**, and **FireCrawl**. For full observability, you'll also need keys for **Langfuse**.
 
--   **Google Gemini API Key**:
-    1.  Visit the Google AI Studio.
-    2.  Click **"Create API Key"** and copy the key.
+### 🌐 Gemini API Key
+Gemini is Google's family of generative AI models. To get an API key:
 
--   **NVIDIA NIM API Key**:
-    1.  Go to the NVIDIA API Catalog.
-    2.  Choose a model, go to the "API" tab, and click **"Get API Key"**.
+1. Visit the [Google AI Studio](https://aistudio.google.com/api-keys).
+2. Sign in with your Google account.
+3. Click **"Create API Key"** and copy the key shown.
+4. Use this key in your `.env` file or configuration as `GEMINI_API_KEY`.
 
--   **FireCrawl API Key**:
-    1.  Sign up at FireCrawl.dev.
-    2.  Find your API key in the dashboard.
+> Note: Gemini API access may be limited based on region or account eligibility. Check the Gemini API [Rate Limits here](https://ai.google.dev/gemini-api/docs/rate-limits)
 
--   **Langfuse API Keys (Optional)**:
-    1.  Sign up or log in at [Langfuse Cloud](https://cloud.langfuse.com/).
-    2.  Navigate to your project settings and then to the "API Keys" tab.
-    3.  Create a new key pair to get your `LANGFUSE_PUBLIC_KEY` (starts with `pk-lf-...`) and `LANGFUSE_SECRET_KEY` (starts with `sk-lf-...`).
-    4.  Add these to your `.env` file to enable tracing.
+### 🌐 NVIDIA NIM API Key
+NIM (NVIDIA Inference Microservices) provides hosted models via REST APIs. To get started:
+
+1. Go to the [NVIDIA API Catalog](https://build.nvidia.com/?integrate_nim=true&hosted_api=true&modal=integrate-nim).
+2. Choose a model (e.g., `nim-gemma`, `nim-mistral`, etc.) and click **"Get API Key"**.
+3. Sign in or create an NVIDIA account if prompted.
+4. Copy your key and use it as `NVIDIA_NIM_API_KEY` in your environment.
+
+> Tip: You can test NIM endpoints directly in the browser before integrating.
+
+### 🌐 FireCrawl API Key
+
+1.  Sign up at [FireCrawl](https://www.firecrawl.dev/).
+2.  Find your API key in the dashboard.
+
+### 🌐 Langfuse API Keys (Optional)
+
+1.  Sign up or log in at [Langfuse Cloud](https://cloud.langfuse.com/).
+2.  Navigate to your project settings and then to the "API Keys" tab.
+3.  Create a new key pair to get your `LANGFUSE_PUBLIC_KEY` (starts with `pk-lf-...`) and `LANGFUSE_SECRET_KEY` (starts with `sk-lf-...`).
+4.  Add these to your `.env` file to enable tracing.
 
 ---
 
@@ -158,8 +173,12 @@ This project is open-source and distributed under the **MIT License**. Feel free
 
 ## 🤝 Acknowledgements
 
--   LangChain for orchestrating LLM interactions.
--   FireCrawl & Crawl4AI for providing powerful scraping backends.
--   NVIDIA AI Endpoints & Google Gemini for their state-of-the-art LLMs.
--   Langfuse for providing excellent observability tools.
--   Gradio for making UI creation simple and elegant.
+-   [LangChain](https://www.langchain.com/) for orchestrating LLM interactions.
+-   [FireCrawl](https://www.firecrawl.dev/) & [Crawl4AI](https://docs.crawl4ai.com/) for providing powerful scraping backends.
+-   [NVIDIA AI Endpoints](https://build.nvidia.com/models) & [Google Gemini API](https://ai.google.dev/gemini-api/docs) for their state-of-the-art LLMs.
+-   [Langfuse](https://langfuse.com/) for providing excellent observability tools.
+-   [Gradio](https://www.gradio.app/) for making UI creation simple and elegant.
+-   [Docker](https://www.docker.com/) for containerization
+-   [Playwright](https://playwright.dev/) for web scraping using [Crawl4AI](https://docs.crawl4ai.com/)
+
+---

@@ -1,0 +1,8 @@
+sdk: docker
+container:
+  port: 7860
+  devPort: 7860
+  keepAlive: true
+  gpu: false
+  allowInternetAccess: true
+  height: 1000  # 👈 This enables scrolling
