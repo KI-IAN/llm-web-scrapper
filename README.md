@@ -9,7 +9,7 @@ app_port: 7860
 
 # LLM Web Scraper (🕸️ → 🤖 → 🧠 → ❓ → 📄)
 
-Scrape any web page, ask questions, and get structured answers powered by LangChain, FireCrawl, and leading LLMs from NVIDIA and Google—all wrapped in a clean Gradio interface.
+Scrape any web page, ask questions, and get structured answers powered by LangChain, FireCrawl/Crawl4AI and leading LLMs from NVIDIA and Google—all wrapped in a clean Gradio interface.
 
 🔗 **Live Demo**: https://huggingface.co/spaces/frkhan/llm-web-scrapper
 
