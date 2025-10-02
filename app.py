@@ -156,30 +156,23 @@ with gr.Blocks() as gradio_ui:
     </div>
     """)
 
-    gr.HTML("""
-    <div style="margin-bottom: 20px; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-        <h2 style="margin-top: 0;">How to Use This App</h2>
-        <p>This app combines web scraping with the power of Large Language Models (LLMs) to extract specific information from web pages. Here's how it works:</p>
-        <ol>
-            <li><strong>Enter a URL:</strong> Provide the URL of the web page you want to analyze.</li>
-            <li><strong>Define Your Query:</strong> Specify the exact information you're looking for (e.g., product name, price, customer ratings).</li>
-            <li><strong>Scrape the Web Page:</strong> Click the "Scrape with FireCrawl" button to extract the content of the page.</li>
-            <li><strong>Select Model & Provider:</strong> Choose the LLM model you want to use for information extraction.</li>
-            <li><strong>Extract Info by LLM:</strong> Click the "Extract Info by LLM" button to get the information based on your query.</li>
-        </ol>
-        
-        <br />
-        <br />
-        
-        <p><strong>What makes this different from a regular web scraper?</strong>  </p>
-    
-        <p>Traditional web scrapers require pre-programming to extract product data for each specific website. These scrapers are brittle and can break if the website's design changes. This app uses LLMs to <em>understand</em> your query and extract only the relevant information, saving you time and effort and removing the need for constant maintenance.</p>
-    </div>
-    """)
+    with gr.Accordion("ℹ️ How to Use This App", open=False):
+        gr.Markdown("""
+        This app combines web scraping with the power of Large Language Models (LLMs) to extract specific information from web pages. Here's how it works:
+        1.  **Enter a URL:** Provide the URL of the web page you want to analyze.
+        2.  **Define Your Query:** Specify the exact information you're looking for (e.g., product name, price, customer ratings).
+        3.  **Scrape the Web Page:** Choose a scraper and click the "Scrape Website" button to extract the content of the page.
+        4.  **Select Model & Provider:** Choose the LLM model you want to use for information extraction.
+        5.  **Extract Info by LLM:** Click the "Extract Info by LLM" button to get the information based on your query.
+
+        ---
+        **What makes this different from a regular web scraper?**
+        Traditional web scrapers require pre-programming to extract product data for each specific website. These scrapers are brittle and can break if the website's design changes. This app uses LLMs to <em>understand</em> your query and extract only the relevant information, saving you time and effort and removing the need for constant maintenance.
+        """)
     
     
     with gr.Column():
-        url_input = gr.Textbox(label="Enter URL to scrape", placeholder="https://example.com/query?search=cat+food")
+        url_input = gr.Textbox(label="Enter URL to scrape", placeholder="https://example.com/query?search=cat+food", autofocus=True)
         query_input = gr.Textbox(label="What information do you want to find?", placeholder="Find product name, price, rating etc. / Summarize the content of this page")
         
         with gr.Row():
