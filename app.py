@@ -180,7 +180,7 @@ with gr.Blocks() as gradio_ui:
     
     with gr.Column():
         url_input = gr.Textbox(label="Enter URL to scrape", placeholder="https://example.com/query?search=cat+food", lines=1)
-        query_input = gr.Textbox(label="What information do you want to find?", placeholder="Find product name, price, rating etc. / Summarize the content of this page", lines=2)
+        query_input = gr.Textbox(label="What information do you want to find?", placeholder="Find product name, price, rating etc. / Summarize the content of this page", lines=1)
         
         with gr.Row():
             scraper_dropdown = gr.Dropdown(
