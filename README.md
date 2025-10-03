@@ -42,6 +42,12 @@ Scrape any web page, ask questions, and get structured answers powered by LangCh
 
 ---
 
+## ⚠️ Important Disclaimer
+
+> This tool is provided for educational and experimental purposes only. Users are solely responsible for their actions and must comply with the terms of service of any website they scrape. Always respect `robots.txt` and be mindful of the website's policies. The developers of this tool are not liable for any misuse.
+
+---
+
 ## 📦 Installation
 
 ### Option 1: Run Locally

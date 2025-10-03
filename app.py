@@ -181,6 +181,15 @@ with gr.Blocks() as gradio_ui:
     
     
     with gr.Column():
+        gr.HTML("""
+        <div style="padding: 12px; border: 1px solid #d32f2f; background-color: #ffebee; border-radius: 8px; margin-bottom: 15px;">
+            <p style="margin: 0; color: #c62828; font-weight: 500;">
+                ⚠️ <code style="background-color: #ffcdd2; color: #c62828; padding: 2px 5px; border-radius: 4px; font-weight: 600;">Disclaimer:</code>.  Please be responsible when scraping websites. Users must comply with the terms of service of any website they scrape and respect 
+                <code style="background-color: #ffcdd2; color: #c62828; padding: 2px 5px; border-radius: 4px; font-weight: 600;">robots.txt</code>. 
+                The developers of this tool are not liable for any misuse.
+            </p>
+        </div>
+        """)
         url_input = gr.Textbox(label="Enter URL to scrape", placeholder="https://example.com/query?search=cat+food", autofocus=True)
         query_input = gr.Textbox(label="What information do you want to find?", placeholder="Find product name, price, rating etc. / Summarize the content of this page")
         
