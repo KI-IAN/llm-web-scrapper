@@ -13,6 +13,8 @@ Scrape any web page, ask questions, and get structured answers powered by LangCh
 
 🔗 **Live Demo**: https://huggingface.co/spaces/frkhan/llm-web-scrapper
 
+🔗 **Read Full Story**: [From Broken Selectors to Intelligent Scraping: A Journey into LLM-Powered Web Automation](https://medium.com/@frkhan/from-broken-selectors-to-intelligent-scraping-a-journey-into-llm-powered-web-automation-fc76d5fe2dbc)
+
 ---
 
 ### 🚀 Features

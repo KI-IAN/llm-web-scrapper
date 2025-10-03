@@ -156,6 +156,15 @@ with gr.Blocks() as gradio_ui:
     </div>
     """)
 
+    gr.HTML("""
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+        <span style="font-size: 16px;">📖 <strong>Read the full story:</strong></span>
+        <a href="https://medium.com/@frkhan/from-broken-selectors-to-intelligent-scraping-a-journey-into-llm-powered-web-automation-fc76d5fe2dbc" target="_blank">
+            <img src="https://img.shields.io/badge/Medium-Read%20Story-black?style=for-the-badge&logo=medium" alt="Read Story on Medium">
+        </a>
+    </div>
+    """)
+
     with gr.Accordion("ℹ️ How to Use This App", open=False):
         gr.Markdown("""
         This app combines web scraping with the power of Large Language Models (LLMs) to extract specific information from web pages. Here's how it works:
