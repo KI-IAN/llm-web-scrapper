@@ -121,26 +121,26 @@ with gr.Blocks() as gradio_ui:
     <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
         <h1 style="margin: 0;"> LLM Web Scraper</h1>
         <div style="display: flex; gap: 10px;">
-            <a href="https://github.com/langchain-ai/langchain" target="_blank">
-                <img src="https://img.shields.io/badge/LangChain-Framework-blue?logo=langchain" alt="LangChain">
+            <a href="https://www.langchain.com/" target="_blank">
+                <img src="https://img.shields.io/badge/LangChain-blue?style=for-the-badge&logo=langchain" alt="LangChain">
             </a>
             <a href="https://ai.google.dev/gemini-api/docs" target="_blank">
-                <img src="https://img.shields.io/badge/Gemini%20API-Google-blue?logo=google" alt="Gemini API">
+                <img src="https://img.shields.io/badge/Gemini-white?style=for-the-badge&logo=google-gemini" alt="Gemini API">
             </a>
             <a href="https://build.nvidia.com/models" target="_blank">
-                <img src="https://img.shields.io/badge/NVIDIA%20NIM-API-green?logo=nvidia" alt="NVIDIA NIM">
+                <img src="https://img.shields.io/badge/NVIDIA-gray?style=for-the-badge&logo=nvidia" alt="NVIDIA NIM">
             </a>
             <a href="https://firecrawl.dev/" target="_blank">
-                <img src="https://img.shields.io/badge/FireCrawl-Web%20Scraper-orange?logo=fire" alt="FireCrawl">
+                <img src="https://img.shields.io/badge/FireCrawl-orange?style=for-the-badge&logo=fire" alt="FireCrawl">
             </a>
             <a href="https://docs.crawl4ai.com/" target="_blank">
-                <img src="https://img.shields.io/badge/Crawl4AI-Web%20Scraper-blueviolet?logo=github" alt="Crawl4AI">
+                <img src="https://img.shields.io/badge/Crawl4AI-blueviolet?style=for-the-badge&logo=github" alt="Crawl4AI">
             </a>
             <a href="https://playwright.dev/" target="_blank">
-                <img src="https://img.shields.io/badge/Playwright-Web%20Automation-brightgreen?logo=playwright" alt="Playwright">
+                <img src="https://img.shields.io/badge/Playwright-brightgreen?style=for-the-badge&logo=playwright" alt="Playwright">
             </a>
             <a href="https://langfuse.com/" target="_blank">
-                <img src="https://img.shields.io/badge/Langfuse-Observability-blue" alt="Langfuse">
+                <img src="https://img.shields.io/badge/Langfuse-blue?style=for-the-badge&logo=langfuse" alt="Langfuse">
             </a>
 
         </div>
@@ -151,7 +151,7 @@ with gr.Blocks() as gradio_ui:
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
         <span style="font-size: 16px;">📦 <strong>Download the full source code:</strong></span>
         <a href="https://github.com/KI-IAN/llm-web-scrapper" target="_blank">
-            <img src="https://img.shields.io/badge/GitHub-View%20Repo-blue?logo=github" alt="GitHub Repo">
+            <img src="https://img.shields.io/badge/GitHub-Repo-blue?style=for-the-badge&logo=github" alt="GitHub Repo">
         </a>
     </div>
     """)
