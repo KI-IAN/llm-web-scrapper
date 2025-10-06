@@ -69,7 +69,8 @@ def extract_page_info_by_llm(user_query: str, scraped_markdown_content: str, mod
     So always read the user query carefully and extract information accordingly.
     
     If you do not find or know the answer, do not hallucinate, do not try to generate fake answers.
-    If no Context is given, simply state "No relevant information found to answer your question."
+    If no Context is given or you can't find or generate any relevant information to answer the question, simply state "No relevant information found to answer your question."
+    Please do not respond with empty string / answer.
     
     Context: 
     {context}
