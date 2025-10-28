@@ -182,6 +182,15 @@ with gr.Blocks() as gradio_ui:
     
     with gr.Column():
         gr.HTML("""
+        <div style="padding: 12px; border: 1px solid #e65100; background-color: #fff3e0; border-radius: 8px; margin-bottom: 15px;">
+            <p style="margin: 0; color: #d84315; font-weight: 500;">
+                🚫 <code style="background-color: #ffcc80; color: #d84315; padding: 2px 5px; border-radius: 4px; font-weight: 600;">Content Warning:</code> 
+                This tool is for educational purposes only. Do not use it to access or scrape adult, NSFW, illegal, or otherwise harmful websites. 
+                The system is designed to detect and block such content. Misuse may result in being blocked from the service.
+            </p>
+        </div>
+        """)
+        gr.HTML("""
         <div style="padding: 12px; border: 1px solid #d32f2f; background-color: #ffebee; border-radius: 8px; margin-bottom: 15px;">
             <p style="margin: 0; color: #c62828; font-weight: 500;">
                 ⚠️ <code style="background-color: #ffcdd2; color: #c62828; padding: 2px 5px; border-radius: 4px; font-weight: 600;">Disclaimer:</code>.  Please be responsible when scraping websites. Users must comply with the terms of service of any website they scrape and respect 

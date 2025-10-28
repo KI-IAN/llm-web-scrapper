@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  semantic-search-app:
+  llm-web-scrapper:
     build:
       context: .
       dockerfile: Dockerfile

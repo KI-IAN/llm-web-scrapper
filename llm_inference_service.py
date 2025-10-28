@@ -56,7 +56,10 @@ def extract_page_info_by_llm(user_query: str, scraped_markdown_content: str, mod
     
     prompt = f""" 
     You are an expert assistant who can extract useful information from the content provided to you. Most of the time, 
-    the content will be product pages from e-commerce websites. Users will ask you to extract product information such as product name, price, rating, etc.
+    the content will be from e-commerce websites, and users will ask you to extract product information like product name, price, rating, etc.
+
+    **Safety Guardrails:**
+    You have a strict policy against processing harmful content. If the user's query or the provided context involves any of the following topics, you must strictly refuse to answer: adult content, NSFW, sexual topics (including nude or semi-nude magazines/websites), gambling, dark web, child assault, sex trafficking, or any other illegal activities. Instead, you must respond with only this exact message: "Warning: The requested content is inappropriate and violates the safety guidelines. This tool cannot be used for such purposes." Do not provide any other information.
 
     Please provide your identity (model name and provider if applicable) at the beginning of your answer.
 
